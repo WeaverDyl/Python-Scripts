@@ -18,19 +18,22 @@ def main():
     print("Found new section! Check API")
 
 def check_class():
-    base_url = "https://api.umd.io/v0/courses/engl393"
-    initial = 48
+    try:
+        base_url = "https://api.umd.io/v0/courses/engl393"
 
-    while True:
-        with urllib.request.urlopen(base_url) as url:
-            data = json.loads(url.read().decode())
-            if len(data["sections"]) > 48:
-                send_message("New section opened for ENGL393!")
-                return
-            else:
-                print(f"Nothing @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}" \
-                       " for ENGL393. Checking in 5 minutes...")
-                sleep(300)
+        while True:
+            with urllib.request.urlopen(base_url) as url:
+                data = json.loads(url.read().decode())
+                if len(data["sections"]) > 48:
+                    send_message("New section opened for ENGL393!")
+                    return
+                else:
+                    print(f"Nothing @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}" \
+                        " for ENGL393. Checking in 5 minutes...")
+                    sleep(300)
+    except urllib.error.HTTPError:
+        sleep(300)
+        check_class()
                 
 
 if __name__ == "__main__":
